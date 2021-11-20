@@ -1,0 +1,30 @@
+Docker Threat Modeling
+Given Docker's system components and the STRIDE framework, identify five potential threats that may arise.
+1. Spoofing : Docker communication between the daemon and container is not protected using TLS, so attacker might use this loop hole to intercept the communication.
+
+2. Tampering : Misconfiguration of dockerfile will give the attacker the ability control and changes on the Dockerfile. Image security also is a big threat and usually affecting the security of our own running Docker without we knowing it.
+
+3. Repudiation : Once get control of the dockerfile, attacker now will be able to change any images or steps which being used in production.
+
+4. Information Disclosure : Any sensitive data (username, password, secret-key, etc) might be exposed through the Dockerfile or any configuration file in the system. 
+
+5. Denial of Service : A common attack with a vast amount of traffic to the docker application that cause the resources of the docker environment to be scarce and affecting other container to starve of resources which resulted with crashed app. Limiting memory when running a container is a best choice to prevent this issue.
+
+6. Elevation of privilege : Attacker once get control of one of the aspect of docker that is runned with --privilege flag, attacker will be able to control any other resources. Prevent this attack by avoiding/eliminating the usage of --user-privilege flag.
+
+Kubernetes Threat Modeling
+Given Kubernetes' system components and the STRIDE framework, identify five potential threats that may arise.
+
+1. Spoofing : kube-api server and etcd is the main parts of kubernetes. Attacker might make a malicious call spoofing API server. Make sure that all call need to be over TLS and no basic and anonymous call allowed.
+
+2. Tampering : Attacker might be able to access and gain control of the etcd. They might change the specification of the pods configuration. We may set the ownership of the etcd files to etcd:etcd using etcd group and user.
+
+3. Repudiation : unauthorized call or changes to the kube-apiserver. Make sure to eliminate any anonymous and basic authentication and all traffic/communication must be over TLS.
+
+4. Information Disclosure : etcd store the key value of our pods configuration. Attacker might be able to get control of the etcd files. This can be avoid or mitigated by saving all the configuration files as secret.
+
+5. Denial of Service : Kubelet on working nodes can send execessive request that overwhelmed the resources. This can be mitigated by protecting the kernel by setting --protect kernel defaults to true or all incoming request must be inspected and make sure that it is only accepting request from registered nodes.
+
+
+Docker-bench Run Results and Analysis
+From the failed findings, select and document 3 findings from the Docker-bench results that you want to harden based on the 5 attack surface areas you identified in Step 1. At least 1 of the 3 hardened findings should be different from the ones mentioned in the exercise (i.e. 5.10, 5.14, and 5.22).
