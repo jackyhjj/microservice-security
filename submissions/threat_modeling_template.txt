@@ -28,3 +28,60 @@ Given Kubernetes' system components and the STRIDE framework, identify five pote
 
 Docker-bench Run Results and Analysis
 From the failed findings, select and document 3 findings from the Docker-bench results that you want to harden based on the 5 attack surface areas you identified in Step 1. At least 1 of the 3 hardened findings should be different from the ones mentioned in the exercise (i.e. 5.10, 5.14, and 5.22).
+
+* 2.1 Ensure network traffic is restricted between containers on the default bridge (Scored)
+-- Description:
+By default, all network traffic is allowed between containers on the same host on the default network bridge. If not desired, restrict all inter-container communication. Link specific containers together that require communication. Alternatively, you can create custom network and only join containers that need to communicate to that custom network.
+
+-- Rationale:
+By default, unrestricted network traffic is enabled between all containers on the same host on the default network bridge. Thus, each container has the potential of reading all packets across the container network on the same host. This might lead to an unintended and unwanted disclosure of information to other containers. Hence, restrict inter-container communication on the default network bridge.
+
+-- Audit:
+Run the below command and verify that the default network bridge has been configured to restrict inter-container communication. docker network ls --quiet | xargs docker network inspect --format '{{ .Name }}: {{ .Options }}'
+It should return com.docker.network.bridge.enable_icc:false for the default network bridge.
+
+-- Remediation:
+Edit the Docker daemon configuration file to ensure that icc is disabled. It should include the following setting -> "icc": false
+Alernatively, run the docker daemon directly and pass --icc=false as an argument. For Example, dockerd --icc=false
+
+* 2.2.b Ensure the logging level is set to 'info' (Scored)
+
+-- Description
+Set Docker daemon log level to info.
+
+-- Rationale
+Setting up an appropriate log level configures the Docker daemon to log events that you would want to review later. A base log level of info and above captures all logs except debug logs. Unless required, you should not run Docker daemon at debug log level.
+
+-- Audit
+To confirm that the log level setting is info, review both the dockerd startup options, and also the log level settings in /etc/docker/daemon.json. To review the dockerd startup options, run:
+
+`ps -ef | grep dockerd`
+
+Ensure that either the --log-level parameter is not present or if present, that it is set to info.
+
+Similarly, review the /etc/docker/daemon.json for the log-level setting.
+
+-- Remediation
+Ensure that the Docker daemon configuration file has the following configuration included:
+
+"log-level": "info" 
+
+Alternatively, run the Docker daemon with the log-level specified:
+
+dockerd --log-level="info"
+
+* 4.5 Ensure Content trust for Docker is Enabled (Scored)
+
+-- Description:
+Content trust is disabled by default and should be enabled in line with organizational security policy.
+
+-- Rationale:
+Content trust provides the ability to use digital signatures for data sent to and received from remote Docker registries. These signatures allow client-side verification of the identity and the publisher of specific image tags and ensures the provenance of container images.
+
+-- Audit:
+You should execute the following command: echo $DOCKER_CONTENT_TRUST
+This should return a value of 1.
+
+-- Remediation:
+To enable content trust in a bash shell, you should enter the following command: export DOCKER_CONTENT_TRUST=1
+Alternatively, you could set this environment variable in your profile file so that content trust in enabled on every login.
