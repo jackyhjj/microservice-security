@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ### Background
 Security is a highly dynamic topic with ever changing threats and priorities. Newsworthy topics ranging from fortune 500 companies like [Garmin](https://www.wired.com/story/garmin-ransomware-hack-warning) paying $10 million in ransom for ransomware attacks to supply chain attacks such as [Solarwinds](https://www.cnet.com/news/solarwinds-hack-officially-blamed-on-russia-what-you-need-to-know) are ever-present. 
 
@@ -17,3 +18,7 @@ No stress, you have tools and security incident response knowledge to respond ;)
 ### Project Instructions
 
 Follow the steps/instructions in the Udacity classroom to complete and submit the project.
+=======
+# microservice-security
+Udacity Cloud Native Scholarshipe Phase 2 - Project 4
+>>>>>>> 7393883d3e0b5220253d3de344d67bf9e9b96701
