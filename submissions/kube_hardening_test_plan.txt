@@ -1,0 +1,8 @@
+How will you test the changes?
+	The most safe way to test the changes we made with the cluster is to use a virtual machine and replicate the environment to be exact the same as the production environment gonna be. This way we can make sure that everything we changed are applied well and if there are wrong changes we can just revert it back or recreate the virtual enviroment again.
+
+    There are several kubernetes core feature test that we can test to have additional way of testing the kubernetes like kubetest or even through CI pipeline
+
+How will you ensure the changes don't negatively affect your cluster?
+
+    Since we are using the virtual machine environment, we can accurately test the each component of the cluster and make sure that it is not having any failure or negative impact to the cluster. Once we have make sure everything is set up to speed and the way it should be, we can make sure to put it to a test for staging environment before going up for production environment.
